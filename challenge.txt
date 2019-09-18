@@ -1,0 +1,122 @@
+Aggregator Process
+
+Assume that we are running a bunch of applications in kubernetes 
+that produce data points at certain interval.
+
+ 
+
+For instance, App1 produces data points as tuple below
+ (<app name, memory, cpu>):
+
+<App1, 50, 0.2>
+
+<App1, 30, 0.3>
+
+<App1, 20, 0.5>
+
+
+For instance, App2 produces data points as tuple below:
+
+<App2, 20, 0.1>
+
+<App2, 80, 0.2>
+
+<App2, 1000, 0.9>
+
+ 
+
+Similarly there are 8 more apps producing data points.
+
+ 
+
+An Aggregator Process will take all these data points,
+apply a **summation operation** on the **second value** and
+**average operation** on the **third value**.
+and create a state as follows
+
+<App1, 100, 0.333>
+
+<App2, 1100, 0.4>
+
+...
+
+<App10, ..., ...>
+
+ 
+
+Also note, the data points should be generated asynchronously.
+So a possible usecase would be **App1** generates two datapoints
+ parallely and tries to **update the same state**.
+If two data points arrive at the same time, the operation should
+ be atomic and threadsafe. The **state of the Aggregator Service**
+has to be **displayed every 1 minute by default and should be configurable**.
+
+ 
+
+type Producer struct {
+
+    appName string
+
+    queue *Queue
+
+}
+
+ 
+
+type Aggregator struct {
+
+    queue *Queue
+
+}
+
+ 
+
+type Queue struct {
+
+   //TODO
+
+}
+
+ 
+
+type State struct {
+
+    //TODO
+
+}
+
+ 
+
+func (s *State) print() {
+
+    //print current state
+
+}
+
+ 
+
+func (p *Producer) ProduceDataPoint() {
+
+   //Generate random data point at random interval
+
+}
+
+ 
+
+func (c *Aggregator) Consume() {
+
+    //Process message from the queue
+
+    //Persist data in the state
+
+}
+
+ 
+
+func main(){
+
+    //TODO
+
+}
+
+ 
